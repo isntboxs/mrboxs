@@ -3,7 +3,7 @@ import { SpotifyNowPlayingSection } from "@/components/page/home/spotify-now-pla
 
 export default function Home() {
   return (
-    <div className="container w-full max-w-lg border p-4">
+    <div className="container w-full max-w-lg space-y-6 p-4">
       <HeroSection />
       <SpotifyNowPlayingSection />
     </div>

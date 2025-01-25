@@ -5,7 +5,7 @@ export default function RootLayout({
 }) {
   return (
     <>
-      <main className="flex min-h-screen items-center justify-center">
+      <main className="flex min-h-screen w-screen flex-col items-center justify-center">
         {children}
       </main>
     </>

@@ -5,7 +5,7 @@ import { TextLoop } from "@/components/ui/text-loop";
 
 export const HeroSection = () => {
   return (
-    <div className="flex w-full items-center gap-4 border">
+    <div className="flex w-full items-center gap-4">
       <Avatar className="size-16">
         <AvatarImage src="https://github.com/isntboxs.png" alt="@mrboxs" />
         <AvatarFallback>B</AvatarFallback>

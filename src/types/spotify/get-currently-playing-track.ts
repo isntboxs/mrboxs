@@ -1,12 +1,11 @@
 import { GetTrackResponse } from "@/types/spotify/get-track-response";
 
 export interface GetCurrentlyPlayingTrack {
+  context?: Context;
   timestamp: number;
   progress_ms: number;
   is_playing: boolean;
-  item: {
-    track: GetTrackResponse;
-  };
+  item: GetTrackResponse;
   currently_playing_type: string;
   actions: {
     disallows: {
@@ -14,4 +13,13 @@ export interface GetCurrentlyPlayingTrack {
       resuming?: boolean;
     };
   };
+}
+
+interface Context {
+  type: string;
+  href: string;
+  external_urls: {
+    spotify: string;
+  };
+  url: string;
 }
