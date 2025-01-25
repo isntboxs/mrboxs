@@ -3,5 +3,11 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return <div>{children}</div>;
+  return (
+    <>
+      <main className="flex min-h-screen items-center justify-center">
+        {children}
+      </main>
+    </>
+  );
 }
