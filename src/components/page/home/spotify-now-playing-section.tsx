@@ -41,7 +41,7 @@ const formatTime = (ms: number) => {
 
 export const SpotifyNowPlayingSection = () => {
   const [trackProgress, setTrackProgress] = useState<number>(0);
-  const [progressTime, setProgressTime] = useState<string>("00:00");
+  const [elapsedTimeMs, setElapsedTimeMs] = useState<number>(0);
 
   const { data, isLoading, isPending } = useQuery({
     queryKey: ["now-playing"],
@@ -60,6 +60,9 @@ export const SpotifyNowPlayingSection = () => {
       const initialProgress = (progress_ms / duration_ms) * 100;
       setTrackProgress(initialProgress);
 
+      const initialElapsedTime = (progress_ms / duration_ms) * duration_ms;
+      setElapsedTimeMs(initialElapsedTime);
+
       const interval = setInterval(() => {
         setTrackProgress((prevProgress) => {
           const newProgress = prevProgress + (1000 / duration_ms) * 100;
@@ -72,10 +75,15 @@ export const SpotifyNowPlayingSection = () => {
           return newProgress;
         });
 
-        // Update progress time every second
-        setProgressTime(() => {
-          const currentTime = Date.now();
-          return formatTime(currentTime - data.timestamp);
+        setElapsedTimeMs((prevElapse) => {
+          const newElapsedTime = prevElapse + 1000;
+
+          if (newElapsedTime >= duration_ms) {
+            clearInterval(interval);
+            return duration_ms;
+          }
+
+          return newElapsedTime;
         });
       }, 1000);
 
@@ -93,14 +101,20 @@ export const SpotifyNowPlayingSection = () => {
         />
       </CardHeader>
       <CardContent className="p-3 pt-0">
-        {data ? <NowPlayingContent {...data} /> : null}
+        {data && data.is_playing ? <NowPlayingContent {...data} /> : null}
       </CardContent>
       <CardFooter className="flex flex-row items-center justify-between gap-4 p-3 pt-0">
-        <p className="text-xs text-muted-foreground">{progressTime}</p>
-        <Progress value={trackProgress} className="h-1" />
         <p className="text-xs text-muted-foreground">
-          {formatTime(data?.item.duration_ms ?? 0)}
+          {formatTime(elapsedTimeMs)}
         </p>
+        <Progress value={trackProgress} className="h-1" />
+        {data && data.is_playing ? (
+          <p className="text-xs text-muted-foreground">
+            {formatTime(data.item.duration_ms)}
+          </p>
+        ) : (
+          <p className="text-xs text-muted-foreground">{formatTime(0)}</p>
+        )}
       </CardFooter>
     </Card>
   );
@@ -124,19 +138,19 @@ const NowPlayingHeader = ({
           </TextShimmer>
           <Loader2 className="size-4 animate-spin text-muted-foreground" />
         </>
-      ) : !data ? (
-        <>
-          <h1 className="text-sm font-semibold text-muted-foreground">
-            Currently not playing Spotify
-          </h1>
-          <FaSpotify className={cn("text-base text-muted-foreground")} />
-        </>
-      ) : (
+      ) : data && data.is_playing ? (
         <>
           <h1 className="text-sm font-semibold text-muted-foreground">
             Listening to Spotify
           </h1>
           <FaSpotify className={cn("text-base text-green-500")} />
+        </>
+      ) : (
+        <>
+          <h1 className="text-sm font-semibold text-muted-foreground">
+            Currently not playing Spotify
+          </h1>
+          <FaSpotify className={cn("text-base text-muted-foreground")} />
         </>
       )}
     </div>
