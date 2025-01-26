@@ -1,17 +1,23 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { Loader2 } from "lucide-react";
-import { motion } from "motion/react";
 import { FaSpotify } from "react-icons/fa";
 
 import { GetCurrentlyPlayingTrack } from "@/types/spotify/get-currently-playing-track";
 import { cn } from "@/lib/utils";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
 import { TextShimmer } from "@/components/ui/text-shimmer";
 
 const NOW_PLAYING_ENDPOINT = "/api/spotify/now-playing";
@@ -25,7 +31,18 @@ const getNowPlaying = async () => {
   }
 };
 
+// Helper function to format time in "00:00" format
+const formatTime = (ms: number) => {
+  const totalSeconds = Math.floor(ms / 1000);
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+  return `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+};
+
 export const SpotifyNowPlayingSection = () => {
+  const [trackProgress, setTrackProgress] = useState<number>(0);
+  const [progressTime, setProgressTime] = useState<string>("00:00");
+
   const { data, isLoading, isPending } = useQuery({
     queryKey: ["now-playing"],
     queryFn: getNowPlaying,
@@ -35,7 +52,36 @@ export const SpotifyNowPlayingSection = () => {
     refetchIntervalInBackground: true,
   });
 
-  console.log({ data, isLoading, isPending });
+  useEffect(() => {
+    if (data && data.is_playing) {
+      const progress_ms = data.progress_ms;
+      const duration_ms = data.item.duration_ms;
+
+      const initialProgress = (progress_ms / duration_ms) * 100;
+      setTrackProgress(initialProgress);
+
+      const interval = setInterval(() => {
+        setTrackProgress((prevProgress) => {
+          const newProgress = prevProgress + (1000 / duration_ms) * 100;
+
+          if (newProgress >= 100) {
+            clearInterval(interval);
+            return 100;
+          }
+
+          return newProgress;
+        });
+
+        // Update progress time every second
+        setProgressTime(() => {
+          const currentTime = Date.now();
+          return formatTime(currentTime - data.timestamp);
+        });
+      }, 1000);
+
+      return () => clearInterval(interval);
+    }
+  }, [data]);
 
   return (
     <Card className="border-none bg-foreground/5">
@@ -49,6 +95,13 @@ export const SpotifyNowPlayingSection = () => {
       <CardContent className="p-3 pt-0">
         {data ? <NowPlayingContent {...data} /> : null}
       </CardContent>
+      <CardFooter className="flex flex-row items-center justify-between gap-4 p-3 pt-0">
+        <p className="text-xs text-muted-foreground">{progressTime}</p>
+        <Progress value={trackProgress} className="h-1" />
+        <p className="text-xs text-muted-foreground">
+          {formatTime(data?.item.duration_ms ?? 0)}
+        </p>
+      </CardFooter>
     </Card>
   );
 };
