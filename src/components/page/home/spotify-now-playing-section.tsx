@@ -43,13 +43,12 @@ export const SpotifyNowPlayingSection = () => {
   const [trackProgress, setTrackProgress] = useState<number>(0);
   const [elapsedTimeMs, setElapsedTimeMs] = useState<number>(0);
 
-  const { data, isLoading, isPending } = useQuery({
+  const { data, isLoading, isPending, refetch } = useQuery({
     queryKey: ["now-playing"],
     queryFn: getNowPlaying,
     refetchOnReconnect: "always",
     refetchOnWindowFocus: "always",
     refetchInterval: 30000,
-    refetchIntervalInBackground: true,
   });
 
   useEffect(() => {
@@ -69,6 +68,7 @@ export const SpotifyNowPlayingSection = () => {
 
           if (newProgress >= 100) {
             clearInterval(interval);
+            refetch();
             return 100;
           }
 
@@ -89,7 +89,7 @@ export const SpotifyNowPlayingSection = () => {
 
       return () => clearInterval(interval);
     }
-  }, [data]);
+  }, [data, refetch]);
 
   return (
     <Card className="border-none bg-foreground/5">
