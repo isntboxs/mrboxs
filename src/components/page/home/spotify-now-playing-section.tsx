@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
 
@@ -12,6 +11,7 @@ import { FaSpotify } from "react-icons/fa";
 import { GetCurrentlyPlayingTrack } from "@/types/spotify/get-currently-playing-track";
 import { cn } from "@/lib/utils";
 
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   Card,
   CardContent,
@@ -158,14 +158,13 @@ const NowPlayingHeader = ({
 const NowPlayingContent = (props: GetCurrentlyPlayingTrack) => {
   return (
     <div className="flex items-center gap-4">
-      <Image
-        priority
-        src={props.item.album.images[0].url}
-        alt={props.item.album.name}
-        width={props.item.album.images[0].width}
-        height={props.item.album.images[0].height}
-        className="h-16 w-16 rounded-md object-cover"
-      />
+      <Avatar className="size-16 rounded-md">
+        <AvatarImage
+          src={props.item.album.images[2].url}
+          alt={props.item.name}
+        />
+        <AvatarFallback>{props.item.name.charAt(0)}</AvatarFallback>
+      </Avatar>
 
       <div className="flex flex-1 flex-col justify-between">
         <p className="line-clamp-1">
