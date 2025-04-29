@@ -139,6 +139,7 @@ const NowPlayingHeader = ({
       ) : data && data.is_playing ? (
         <>
           <h1 className="text-muted-foreground text-sm font-semibold">
+            <div className="mr-2 inline-flex size-2.5 animate-pulse rounded-full bg-green-500" />
             Listening to Spotify
           </h1>
           <FaSpotify className={cn("text-base text-green-500")} />
