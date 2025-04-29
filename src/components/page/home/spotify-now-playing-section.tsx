@@ -92,18 +92,18 @@ export const SpotifyNowPlayingSection = () => {
   }, [data, refetch]);
 
   return (
-    <Card className="bg-foreground/5 border-none">
-      <CardHeader className="p-3">
+    <Card className="gap-3 py-3">
+      <CardHeader className="px-3">
         <NowPlayingHeader
           isLoading={isLoading}
           isPending={isPending}
           data={data}
         />
       </CardHeader>
-      <CardContent className="p-3 pt-0">
+      <CardContent className="px-3">
         {data && data.is_playing ? <NowPlayingContent {...data} /> : null}
       </CardContent>
-      <CardFooter className="flex flex-row items-center justify-between gap-4 p-3 pt-0">
+      <CardFooter className="flex flex-row items-center justify-between gap-4 px-3">
         <p className="text-muted-foreground text-xs">
           {formatTime(elapsedTimeMs)}
         </p>
