@@ -3,14 +3,15 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-
 import { useQuery } from "@tanstack/react-query";
+
 import axios from "axios";
 import { Loader2 } from "lucide-react";
 import { FaSpotify } from "react-icons/fa";
 
 import { GetCurrentlyPlayingTrack } from "@/types/spotify/get-currently-playing-track";
 import { cn } from "@/lib/utils";
+
 import {
   Card,
   CardContent,
@@ -18,7 +19,6 @@ import {
   CardHeader,
 } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { TextShimmer } from "@/components/ui/text-shimmer";
 
 const NOW_PLAYING_ENDPOINT = "/api/spotify/now-playing";
 
@@ -92,7 +92,7 @@ export const SpotifyNowPlayingSection = () => {
   }, [data, refetch]);
 
   return (
-    <Card className="border-none bg-foreground/5">
+    <Card className="bg-foreground/5 border-none">
       <CardHeader className="p-3">
         <NowPlayingHeader
           isLoading={isLoading}
@@ -104,16 +104,16 @@ export const SpotifyNowPlayingSection = () => {
         {data && data.is_playing ? <NowPlayingContent {...data} /> : null}
       </CardContent>
       <CardFooter className="flex flex-row items-center justify-between gap-4 p-3 pt-0">
-        <p className="text-xs text-muted-foreground">
+        <p className="text-muted-foreground text-xs">
           {formatTime(elapsedTimeMs)}
         </p>
         <Progress value={trackProgress} className="h-1" />
         {data && data.is_playing ? (
-          <p className="text-xs text-muted-foreground">
+          <p className="text-muted-foreground text-xs">
             {formatTime(data.item.duration_ms)}
           </p>
         ) : (
-          <p className="text-xs text-muted-foreground">{formatTime(0)}</p>
+          <p className="text-muted-foreground text-xs">{formatTime(0)}</p>
         )}
       </CardFooter>
     </Card>
@@ -133,24 +133,22 @@ const NowPlayingHeader = ({
     <div className="flex w-full flex-row items-center justify-between">
       {isLoading || isPending ? (
         <>
-          <TextShimmer className="text-sm font-semibold" duration={1}>
-            Loading...
-          </TextShimmer>
-          <Loader2 className="size-4 animate-spin text-muted-foreground" />
+          <p className="text-sm font-semibold">Loading...</p>
+          <Loader2 className="text-muted-foreground size-4 animate-spin" />
         </>
       ) : data && data.is_playing ? (
         <>
-          <h1 className="text-sm font-semibold text-muted-foreground">
+          <h1 className="text-muted-foreground text-sm font-semibold">
             Listening to Spotify
           </h1>
           <FaSpotify className={cn("text-base text-green-500")} />
         </>
       ) : (
         <>
-          <h1 className="text-sm font-semibold text-muted-foreground">
+          <h1 className="text-muted-foreground text-sm font-semibold">
             Currently not playing Spotify
           </h1>
-          <FaSpotify className={cn("text-base text-muted-foreground")} />
+          <FaSpotify className={cn("text-muted-foreground text-base")} />
         </>
       )}
     </div>
@@ -178,7 +176,7 @@ const NowPlayingContent = (props: GetCurrentlyPlayingTrack) => {
             {props.item.name}
           </Link>
         </p>
-        <p className="line-clamp-1 text-sm text-muted-foreground">
+        <p className="text-muted-foreground line-clamp-1 text-sm">
           {props.item.artists
             .map((artist) => {
               return (
@@ -203,17 +201,17 @@ const NowPlayingContent = (props: GetCurrentlyPlayingTrack) => {
         </p>
 
         {props.context ? (
-          <p className="line-clamp-1 text-xs text-muted-foreground">
+          <p className="text-muted-foreground line-clamp-1 text-xs">
             playing on{" "}
             <Link
               href={props.context.external_urls.spotify}
-              className="transition-all duration-300 ease-in-out hover:text-green-500 hover:text-primary hover:underline hover:underline-offset-2"
+              className="transition-all duration-300 ease-in-out hover:text-green-500 hover:underline hover:underline-offset-2"
             >
               {props.context.type}
             </Link>
           </p>
         ) : (
-          <p className="line-clamp-1 text-xs text-muted-foreground">
+          <p className="text-muted-foreground line-clamp-1 text-xs">
             playing on track
           </p>
         )}
