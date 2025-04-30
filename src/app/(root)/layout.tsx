@@ -11,10 +11,10 @@ export default function RootLayout({
         <div
           className={cn(
             "absolute inset-0",
-            "[background-size:25px_25px]",
+            "[background-size:50px_50px]",
             "[background-image:radial-gradient(#d4d4d4_1px,transparent_1px)]",
             "dark:[background-image:radial-gradient(#404040_1px,transparent_1px)]",
-            "pointer-events-none -z-10 opacity-15",
+            "pointer-events-none -z-10 opacity-30",
           )}
         />
         <div
