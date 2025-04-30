@@ -1,11 +1,12 @@
 import axios, { AxiosError } from "axios";
 import qs from "query-string";
 
+import { env } from "@/env";
 import { GetAccessTokenResponse } from "@/types/spotify/get-access-token-response";
 
-const client_id = process.env.SPOTIFY_CLIENT_ID;
-const client_secret = process.env.SPOTIFY_CLIENT_SECRET;
-const refresh_token = process.env.SPOTIFY_REFRESH_TOKEN;
+const client_id = env.SPOTIFY_CLIENT_ID;
+const client_secret = env.SPOTIFY_CLIENT_SECRET;
+const refresh_token = env.SPOTIFY_REFRESH_TOKEN;
 
 const buffer = Buffer.from(`${client_id}:${client_secret}`).toString("base64");
 const TOKEN_ENDPOINT = `https://accounts.spotify.com/api/token`;
