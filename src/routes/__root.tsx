@@ -1,8 +1,15 @@
-import { HeadContent, Scripts, createRootRoute } from '@tanstack/react-router'
+import {
+  HeadContent,
+  Outlet,
+  Scripts,
+  createRootRoute,
+} from '@tanstack/react-router'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import { TanStackDevtools } from '@tanstack/react-devtools'
 
 import appCss from '@/styles.css?url'
+import { ThemeProvider } from '@/components/providers/theme-provider'
+import { Toaster } from '@/components/ui/sonner'
 
 export const Route = createRootRoute({
   head: () => ({
@@ -26,17 +33,28 @@ export const Route = createRootRoute({
     ],
   }),
 
-  shellComponent: RootDocument,
+  component: RootComponent,
 })
+
+function RootComponent() {
+  return (
+    <RootDocument>
+      <Outlet />
+    </RootDocument>
+  )
+}
 
 function RootDocument({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <HeadContent />
       </head>
-      <body>
-        {children}
+      <body className="selection:bg-primary selection:text-primary-foreground">
+        <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+          {children}
+          <Toaster position="top-right" />
+        </ThemeProvider>
         <TanStackDevtools
           config={{
             position: 'bottom-right',
