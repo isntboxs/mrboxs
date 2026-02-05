@@ -4,6 +4,7 @@ import {
   Scripts,
   createRootRoute,
 } from '@tanstack/react-router'
+import { useEffect } from "react";
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import { TanStackDevtools } from '@tanstack/react-devtools'
 
@@ -37,6 +38,13 @@ export const Route = createRootRoute({
 })
 
 function RootComponent() {
+  useEffect(() => {
+    if (import.meta.env.DEV) {
+      void import("react-grab");
+      void import("@react-grab/claude-code/client");
+    }
+  }, []);
+
   return (
     <RootDocument>
       <Outlet />
