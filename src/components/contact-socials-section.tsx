@@ -1,6 +1,7 @@
 import { ArrowUpRight } from '@hugeicons/core-free-icons'
 import { HugeiconsIcon } from '@hugeicons/react'
-import { Button } from './ui/button'
+import { buttonVariants } from './ui/button'
+import { cn } from '@/lib/utils'
 import { SimpleIcons } from '@/components/simple-icons'
 
 const socialLinks = [
@@ -60,9 +61,13 @@ export const ContactSocialsSection = () => {
                 </p>
               </div>
 
-              <Button size="icon" variant="ghost">
+              <span
+                className={cn(
+                  buttonVariants({ size: 'icon', variant: 'ghost' }),
+                )}
+              >
                 <HugeiconsIcon icon={ArrowUpRight} />
-              </Button>
+              </span>
             </div>
           </a>
         ))}

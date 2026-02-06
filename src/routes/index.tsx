@@ -3,8 +3,7 @@ import type { GetCurrentlyPlayingTrack } from '@/types/spotify/get-currently-pla
 import { cn } from '@/lib/utils'
 import { Header } from '@/components/header'
 import { AboutSection } from '@/components/about-section'
-import { env } from '@/lib/env/client'
-import { ContactSocialsSection } from '@/components/contact-socials-section copy'
+import { ContactSocialsSection } from '@/components/contact-socials-section'
 import { GithubContribSection } from '@/components/github-contrib-section'
 
 export const Route = createFileRoute('/')({
@@ -13,7 +12,9 @@ export const Route = createFileRoute('/')({
     return queryClient.prefetchQuery({
       queryKey: ['now-playing'],
       queryFn: async () => {
-        const res = await fetch(`${env.VITE_APP_URL}/api/spotify/now-playing`)
+        const res = await fetch(
+          `${process.env.VITE_APP_URL}/api/spotify/now-playing`,
+        )
         return res.json() as Promise<GetCurrentlyPlayingTrack>
       },
     })

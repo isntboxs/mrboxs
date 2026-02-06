@@ -26,7 +26,9 @@ export const getSpotifyAccessToken = async (): Promise<
       },
       body: AUTH_PARAMS,
     })
-
+    if (!response.ok) {
+      throw new Error(`Spotify token request failed: ${response.status}`)
+    }
     return response.json() as Promise<GetAccessTokenResponse>
   } catch (error) {
     console.error(error)

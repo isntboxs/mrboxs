@@ -1,7 +1,7 @@
-import type { GetAlbumsResponse } from '@/types/spotify/get-albums-response'
+import type { SimplifiedAlbum } from '@/types/spotify/simplified-album'
 
 export interface GetTrackResponse {
-  album: GetAlbumsResponse
+  album: SimplifiedAlbum
   artists: Artist[]
   available_markets: string[]
   disc_number: number
