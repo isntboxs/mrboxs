@@ -1,9 +1,25 @@
 import { createFileRoute } from '@tanstack/react-router'
+import type { GetCurrentlyPlayingTrack } from '@/types/spotify/get-currently-playing-track'
 import { cn } from '@/lib/utils'
 import { Header } from '@/components/header'
 import { AboutSection } from '@/components/about-section'
+import { ContactSocialsSection } from '@/components/contact-socials-section'
+import { GithubContribSection } from '@/components/github-contrib-section'
 
-export const Route = createFileRoute('/')({ component: App })
+export const Route = createFileRoute('/')({
+  component: App,
+  loader: ({ context: { queryClient } }) => {
+    return queryClient.prefetchQuery({
+      queryKey: ['now-playing'],
+      queryFn: async () => {
+        const res = await fetch(
+          `${process.env.VITE_APP_URL}/api/spotify/now-playing`,
+        )
+        return res.json() as Promise<GetCurrentlyPlayingTrack>
+      },
+    })
+  },
+})
 
 function App() {
   return (
@@ -30,13 +46,13 @@ function App() {
         <div className="dark:bg-background bg-background pointer-events-none absolute inset-0 flex items-center justify-center mask-[radial-gradient(ellipse_at_center,transparent_75%,black)]" />
         <div className="pointer-events-none absolute inset-0 z-50 h-full w-full bg-[url('/grain.svg')] bg-size-[128px] bg-repeat opacity-[0.08] dark:opacity-[0.15]" />
         {/* main content */}
-        <div className="container mx-auto w-full max-w-3xl flex-1 border-x py-6">
+        <div className="border-primary/35 container mx-auto w-full max-w-3xl flex-1 border-x py-6">
           <Header />
 
           {/* Diagonal Grid */}
           <div className="relative h-10">
             <div
-              className="absolute inset-0 opacity-[0.15]"
+              className="absolute inset-0 opacity-[0.10]"
               style={{
                 backgroundImage: `repeating-linear-gradient(
                   315deg,
@@ -50,6 +66,42 @@ function App() {
           </div>
 
           <AboutSection />
+
+          {/* Diagonal Grid */}
+          <div className="relative h-10">
+            <div
+              className="absolute inset-0 -z-10 opacity-[0.10]"
+              style={{
+                backgroundImage: `repeating-linear-gradient(
+                  315deg,
+                  #fff,
+                  #fff 1px,
+                  transparent 1px,
+                  transparent 5px
+                )`,
+              }}
+            />
+          </div>
+
+          <ContactSocialsSection />
+
+          {/* Diagonal Grid */}
+          <div className="relative h-10">
+            <div
+              className="absolute inset-0 -z-10 opacity-[0.10]"
+              style={{
+                backgroundImage: `repeating-linear-gradient(
+                  315deg,
+                  #fff,
+                  #fff 1px,
+                  transparent 1px,
+                  transparent 5px
+                )`,
+              }}
+            />
+          </div>
+
+          <GithubContribSection />
         </div>
       </main>
     </div>

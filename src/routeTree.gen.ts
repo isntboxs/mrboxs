@@ -10,33 +10,43 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ApiSpotifyNowPlayingRouteImport } from './routes/api.spotify.now-playing'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiSpotifyNowPlayingRoute = ApiSpotifyNowPlayingRouteImport.update({
+  id: '/api/spotify/now-playing',
+  path: '/api/spotify/now-playing',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/api/spotify/now-playing': typeof ApiSpotifyNowPlayingRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/api/spotify/now-playing': typeof ApiSpotifyNowPlayingRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/api/spotify/now-playing': typeof ApiSpotifyNowPlayingRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/api/spotify/now-playing'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/api/spotify/now-playing'
+  id: '__root__' | '/' | '/api/spotify/now-playing'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ApiSpotifyNowPlayingRoute: typeof ApiSpotifyNowPlayingRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +58,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/spotify/now-playing': {
+      id: '/api/spotify/now-playing'
+      path: '/api/spotify/now-playing'
+      fullPath: '/api/spotify/now-playing'
+      preLoaderRoute: typeof ApiSpotifyNowPlayingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ApiSpotifyNowPlayingRoute: ApiSpotifyNowPlayingRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
