@@ -6,7 +6,6 @@ import {
   createRootRouteWithContext,
 } from '@tanstack/react-router'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
-import { useEffect } from 'react'
 
 import { ReactQueryDevtoolsPanel } from '@tanstack/react-query-devtools'
 import type { QueryClient } from '@tanstack/react-query'
@@ -44,13 +43,6 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 })
 
 function RootComponent() {
-  useEffect(() => {
-    if (import.meta.env.DEV) {
-      void import('react-grab')
-      void import('@react-grab/claude-code/client')
-    }
-  }, [])
-
   return (
     <RootDocument>
       <Outlet />
