@@ -1,18 +1,24 @@
+import { TanStackDevtools } from '@tanstack/react-devtools'
 import {
   HeadContent,
   Outlet,
   Scripts,
-  createRootRoute,
+  createRootRouteWithContext,
 } from '@tanstack/react-router'
-import { useEffect } from "react";
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
-import { TanStackDevtools } from '@tanstack/react-devtools'
+import { useEffect } from 'react'
 
-import appCss from '@/styles.css?url'
+import { ReactQueryDevtoolsPanel } from '@tanstack/react-query-devtools'
+import type { QueryClient } from '@tanstack/react-query'
 import { ThemeProvider } from '@/components/providers/theme-provider'
 import { Toaster } from '@/components/ui/sonner'
+import appCss from '@/styles.css?url'
 
-export const Route = createRootRoute({
+interface MyRouterContext {
+  queryClient: QueryClient
+}
+
+export const Route = createRootRouteWithContext<MyRouterContext>()({
   head: () => ({
     meta: [
       {
@@ -40,10 +46,10 @@ export const Route = createRootRoute({
 function RootComponent() {
   useEffect(() => {
     if (import.meta.env.DEV) {
-      void import("react-grab");
-      void import("@react-grab/claude-code/client");
+      void import('react-grab')
+      void import('@react-grab/claude-code/client')
     }
-  }, []);
+  }, [])
 
   return (
     <RootDocument>
@@ -71,6 +77,10 @@ function RootDocument({ children }: { children: React.ReactNode }) {
             {
               name: 'Tanstack Router',
               render: <TanStackRouterDevtoolsPanel />,
+            },
+            {
+              name: 'React Query',
+              render: <ReactQueryDevtoolsPanel />,
             },
           ]}
         />
