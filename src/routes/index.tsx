@@ -5,6 +5,7 @@ import { Header } from '@/components/header'
 import { AboutSection } from '@/components/about-section'
 import { env } from '@/lib/env/client'
 import { ContactSocialsSection } from '@/components/contact-socials-section copy'
+import { GithubContribSection } from '@/components/github-contrib-section'
 
 export const Route = createFileRoute('/')({
   component: App,
@@ -98,6 +99,8 @@ function App() {
               }}
             />
           </div>
+
+          <GithubContribSection />
         </div>
       </main>
     </div>
