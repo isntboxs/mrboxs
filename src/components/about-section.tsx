@@ -20,7 +20,7 @@ export const AboutSection = () => {
           </Avatar>
         </div>
 
-        <div className="relative flex h-32 flex-1 flex-col justify-end">
+        <div className="relative flex h-32 min-w-0 flex-1 flex-col justify-end">
           <NowPlayingCard />
 
           <div>

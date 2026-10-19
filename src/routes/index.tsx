@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { nowPlayingQueryOptions } from '@/lib/spotify/query'
+import { nowPlayingQueryOptions } from '@/lib/now-playing/query'
 import { cn } from '@/lib/utils'
 import { Header } from '@/components/header'
 import { AboutSection } from '@/components/about-section'

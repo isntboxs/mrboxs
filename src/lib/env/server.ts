@@ -4,10 +4,10 @@ import { z } from 'zod'
 
 export const env = createEnv({
   server: {
-    SPOTIFY_CLIENT_ID: z.string(),
-    SPOTIFY_CLIENT_SECRET: z.string(),
-    SPOTIFY_REFRESH_TOKEN: z.string(),
+    LASTFM_USERNAME: z.string().trim().min(1).optional(),
+    LASTFM_API_KEY: z.string().trim().min(1).optional(),
   },
 
   runtimeEnv: process.env,
+  emptyStringAsUndefined: true,
 })

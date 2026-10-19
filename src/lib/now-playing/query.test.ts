@@ -18,12 +18,12 @@ it('treats HTTP 204 as idle without attempting JSON parsing', async () => {
   await expect(fetchNowPlaying()).resolves.toBeNull()
 })
 
-it('propagates the server authorization error without automatic retries', async () => {
+it('propagates the server configuration error without automatic retries', async () => {
   fetchMock.mockResolvedValueOnce(
     Response.json(
       {
-        code: 'SPOTIFY_REAUTH_REQUIRED',
-        error: 'Reconnect the Spotify account.',
+        code: 'LASTFM_INVALID_KEY',
+        error: 'Check the Last.fm API key.',
       },
       { status: 503 },
     ),
@@ -32,7 +32,7 @@ it('propagates the server authorization error without automatic retries', async 
   try {
     await expect(
       queryClient.fetchQuery(nowPlayingQueryOptions),
-    ).rejects.toMatchObject({ code: 'SPOTIFY_REAUTH_REQUIRED' })
+    ).rejects.toMatchObject({ code: 'LASTFM_INVALID_KEY' })
     expect(fetchMock).toHaveBeenCalledTimes(1)
   } finally {
     queryClient.clear()
@@ -44,7 +44,7 @@ it('uses the current browser origin and passes cancellation through', async () =
   fetchMock.mockResolvedValueOnce(new Response(null, { status: 204 }))
   const controller = new AbortController()
   await fetchNowPlaying(controller.signal)
-  expect(fetchMock).toHaveBeenCalledWith('/api/spotify/now-playing', {
+  expect(fetchMock).toHaveBeenCalledWith('/api/now-playing', {
     signal: controller.signal,
   })
 })

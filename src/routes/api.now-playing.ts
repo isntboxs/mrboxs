@@ -1,10 +1,10 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { getNowPlaying } from '@/lib/spotify/now-playing'
-import { SpotifyError } from '@/lib/spotify/error'
+import { getNowPlaying } from '@/lib/lastfm/now-playing'
+import { NowPlayingError } from '@/lib/now-playing/error'
 
 const responseHeaders = { 'Cache-Control': 'no-store' }
 
-export const Route = createFileRoute('/api/spotify/now-playing')({
+export const Route = createFileRoute('/api/now-playing')({
   server: {
     handlers: {
       GET: async () => {
@@ -16,11 +16,11 @@ export const Route = createFileRoute('/api/spotify/now-playing')({
           return Response.json(data, { headers: responseHeaders })
         } catch (error) {
           const failure =
-            error instanceof SpotifyError
+            error instanceof NowPlayingError
               ? error
-              : new SpotifyError(
-                  'SPOTIFY_UNAVAILABLE',
-                  'Spotify playback is temporarily unavailable.',
+              : new NowPlayingError(
+                  'NOW_PLAYING_UNAVAILABLE',
+                  'Now playing is temporarily unavailable.',
                 )
           return Response.json(
             { code: failure.code, error: failure.message },

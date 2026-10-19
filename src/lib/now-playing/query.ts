@@ -1,35 +1,35 @@
 import { queryOptions } from '@tanstack/react-query'
-import type { GetCurrentlyPlayingTrack } from '@/types/spotify/get-currently-playing-track'
-import type { SpotifyErrorCode } from '@/lib/spotify/error'
-import { SpotifyError } from '@/lib/spotify/error'
+import type { NowPlayingTrack } from '@/types/now-playing'
+import type { NowPlayingErrorCode } from '@/lib/now-playing/error'
+import { NowPlayingError } from '@/lib/now-playing/error'
 import { env } from '@/lib/env/client'
 
 export const fetchNowPlaying = async (
   signal?: AbortSignal,
-): Promise<GetCurrentlyPlayingTrack | null> => {
+): Promise<NowPlayingTrack | null> => {
   const url =
     typeof window === 'undefined'
-      ? new URL('/api/spotify/now-playing', env.VITE_APP_URL)
-      : '/api/spotify/now-playing'
+      ? new URL('/api/now-playing', env.VITE_APP_URL)
+      : '/api/now-playing'
   const response = await fetch(url, { signal })
   if (response.status === 204) {
     return null
   }
   if (!response.ok) {
     const data = (await response.json().catch(() => null)) as {
-      code?: SpotifyErrorCode
+      code?: NowPlayingErrorCode
       error?: string
     } | null
-    throw new SpotifyError(
-      data?.code ?? 'SPOTIFY_UNAVAILABLE',
-      data?.error ?? 'Spotify playback is temporarily unavailable.',
+    throw new NowPlayingError(
+      data?.code ?? 'NOW_PLAYING_UNAVAILABLE',
+      data?.error ?? 'Now playing is temporarily unavailable.',
     )
   }
-  return response.json() as Promise<GetCurrentlyPlayingTrack>
+  return response.json() as Promise<NowPlayingTrack>
 }
 
 export const nowPlayingQueryOptions = queryOptions({
-  queryKey: ['now-playing'],
+  queryKey: ['now-playing', 'lastfm'],
   queryFn: ({ signal }) => fetchNowPlaying(signal),
   staleTime: 15_000,
   retry: false,
@@ -39,10 +39,10 @@ export const nowPlayingQueryOptions = queryOptions({
   refetchInterval: (query) => {
     const error = query.state.error
     if (
-      error instanceof SpotifyError &&
-      (error.code === 'SPOTIFY_REAUTH_REQUIRED' ||
-        error.code === 'SPOTIFY_INVALID_CLIENT' ||
-        error.code === 'SPOTIFY_FORBIDDEN')
+      error instanceof NowPlayingError &&
+      (error.code === 'LASTFM_NOT_CONFIGURED' ||
+        error.code === 'LASTFM_INVALID_KEY' ||
+        error.code === 'LASTFM_INVALID_USER')
     ) {
       return false
     }

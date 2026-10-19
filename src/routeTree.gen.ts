@@ -10,43 +10,43 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as ApiSpotifyNowPlayingRouteImport } from './routes/api.spotify.now-playing'
+import { Route as ApiNowPlayingRouteImport } from './routes/api.now-playing'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiSpotifyNowPlayingRoute = ApiSpotifyNowPlayingRouteImport.update({
-  id: '/api/spotify/now-playing',
-  path: '/api/spotify/now-playing',
+const ApiNowPlayingRoute = ApiNowPlayingRouteImport.update({
+  id: '/api/now-playing',
+  path: '/api/now-playing',
   getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/api/spotify/now-playing': typeof ApiSpotifyNowPlayingRoute
+  '/api/now-playing': typeof ApiNowPlayingRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/api/spotify/now-playing': typeof ApiSpotifyNowPlayingRoute
+  '/api/now-playing': typeof ApiNowPlayingRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/api/spotify/now-playing': typeof ApiSpotifyNowPlayingRoute
+  '/api/now-playing': typeof ApiNowPlayingRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/api/spotify/now-playing'
+  fullPaths: '/' | '/api/now-playing'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/api/spotify/now-playing'
-  id: '__root__' | '/' | '/api/spotify/now-playing'
+  to: '/' | '/api/now-playing'
+  id: '__root__' | '/' | '/api/now-playing'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  ApiSpotifyNowPlayingRoute: typeof ApiSpotifyNowPlayingRoute
+  ApiNowPlayingRoute: typeof ApiNowPlayingRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -58,11 +58,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/spotify/now-playing': {
-      id: '/api/spotify/now-playing'
-      path: '/api/spotify/now-playing'
-      fullPath: '/api/spotify/now-playing'
-      preLoaderRoute: typeof ApiSpotifyNowPlayingRouteImport
+    '/api/now-playing': {
+      id: '/api/now-playing'
+      path: '/api/now-playing'
+      fullPath: '/api/now-playing'
+      preLoaderRoute: typeof ApiNowPlayingRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -70,7 +70,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  ApiSpotifyNowPlayingRoute: ApiSpotifyNowPlayingRoute,
+  ApiNowPlayingRoute: ApiNowPlayingRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
