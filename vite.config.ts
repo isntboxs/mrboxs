@@ -2709,6 +2709,8 @@ const config = defineConfig({
     ignorePatterns: ['package-lock.json', 'pnpm-lock.yaml', 'yarn.lock'],
   },
   resolve: {
+    // TanStack devtools and their panels must share the same Solid runtime.
+    dedupe: ['solid-js'],
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
     },
