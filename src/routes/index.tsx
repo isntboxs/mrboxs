@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
-import type { GetCurrentlyPlayingTrack } from '@/types/spotify/get-currently-playing-track'
+import { nowPlayingQueryOptions } from '@/lib/spotify/query'
 import { cn } from '@/lib/utils'
 import { Header } from '@/components/header'
 import { AboutSection } from '@/components/about-section'
@@ -9,15 +9,7 @@ import { GithubContribSection } from '@/components/github-contrib-section'
 export const Route = createFileRoute('/')({
   component: App,
   loader: ({ context: { queryClient } }) => {
-    return queryClient.prefetchQuery({
-      queryKey: ['now-playing'],
-      queryFn: async () => {
-        const res = await fetch(
-          `${process.env.VITE_APP_URL}/api/spotify/now-playing`,
-        )
-        return res.json() as Promise<GetCurrentlyPlayingTrack>
-      },
-    })
+    return queryClient.prefetchQuery(nowPlayingQueryOptions)
   },
 })
 

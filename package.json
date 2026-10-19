@@ -10,6 +10,7 @@
     "lint": "vp lint",
     "format": "vp fmt",
     "check": "vp fmt . && vp lint --fix",
+    "spotify:authorize": "node scripts/spotify-authorize.mjs",
     "prepare": "vp config"
   },
   "dependencies": {
